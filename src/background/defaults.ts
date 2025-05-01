@@ -7,7 +7,6 @@ export const DEFAULT_SETTINGS: Settings = {
     redirectDelay: 1000,
 };
 
-// Default rule groups
 export const DEFAULT_RULE_GROUPS: RuleGroup[] = [
     {
         id: 'github',
@@ -27,6 +26,38 @@ export const DEFAULT_RULE_GROUPS: RuleGroup[] = [
                 name: 'GitHub Dev to GitHub',
                 enabled: true,
                 fromPattern: '^https?://github\\.dev/([^/]+/[^/]+)(?:/.*)?$',
+                toPattern: 'https://github.com/$1',
+                priority: 1,
+            },
+            {
+                id: 'github-to-deepwiki',
+                name: 'github.com → deepwiki.com',
+                enabled: true,
+                fromPattern: '^https?://github\\.com/(.*)$',
+                toPattern: 'https://deepwiki.com/$1',
+                priority: 1,
+            },
+            {
+                id: 'deepwiki-to-github',
+                name: 'deepwiki.com → github.com',
+                enabled: true,
+                fromPattern: '^https?://deepwiki\\.com/(.*)$',
+                toPattern: 'https://github.com/$1',
+                priority: 1,
+            },
+            {
+                id: 'github-to-github1s',
+                name: 'github.com → github1s.com',
+                enabled: true,
+                fromPattern: '^https?://github\\.com/(.*)$',
+                toPattern: 'https://github1s.com/$1',
+                priority: 1,
+            },
+            {
+                id: 'github1s-to-github',
+                name: 'github1s.com → github.com',
+                enabled: true,
+                fromPattern: '^https?://github1s\\.com/(.*)$',
                 toPattern: 'https://github.com/$1',
                 priority: 1,
             },
