@@ -1,5 +1,5 @@
-import { copyFileSync, mkdirSync, existsSync, rmSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { copyFileSync, mkdirSync, existsSync, rmSync, readdirSync, statSync, cpSync } from 'fs';
+import { resolve, dirname, join } from 'path';
 
 const sourceDir = resolve('./icons');
 const destDir = resolve('./dist/icons');
@@ -32,6 +32,23 @@ try {
   console.log(`Copied manifest.json to dist/`);
 } catch (error) {
   console.error(`Error copying manifest.json: ${error.message}`);
+}
+
+// Copy _locales directory
+const localesSource = resolve('./src/_locales');
+const localesDest = resolve('./dist/_locales');
+
+try {
+  // Create destination directory if it doesn't exist
+  if (!existsSync(localesDest)) {
+    mkdirSync(localesDest, { recursive: true });
+  }
+  
+  // Copy the entire _locales directory
+  cpSync(localesSource, localesDest, { recursive: true });
+  console.log(`Copied _locales directory to dist/`);
+} catch (error) {
+  console.error(`Error copying _locales: ${error.message}`);
 }
 
 // Clean up unnecessary files

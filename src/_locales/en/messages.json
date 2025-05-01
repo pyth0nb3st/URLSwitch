@@ -1,0 +1,94 @@
+{
+    "appName": {
+        "message": "URL Switch",
+        "description": "The name of the extension"
+    },
+    "appDescription": {
+        "message": "Bidirectional URL switching and redirection between related websites",
+        "description": "The description of the extension"
+    },
+    "enabled": {
+        "message": "Enabled",
+        "description": "Extension is enabled"
+    },
+    "disabled": {
+        "message": "Disabled",
+        "description": "Extension is disabled"
+    },
+    "loading": {
+        "message": "Loading...",
+        "description": "Loading indicator text"
+    },
+    "noMatchesFound": {
+        "message": "No matching redirect rules for this URL",
+        "description": "Text shown when no redirect matches are found"
+    },
+    "availableRedirects": {
+        "message": "Available Redirects",
+        "description": "Title for redirects list"
+    },
+    "autoRedirect": {
+        "message": "Auto Redirect",
+        "description": "Auto redirect toggle option"
+    },
+    "settings": {
+        "message": "Settings",
+        "description": "Settings button text"
+    },
+    "reloadRequired": {
+        "message": "Language changed. Reload extension to apply changes?",
+        "description": "Message shown when language is changed and reload is needed"
+    },
+    "language": {
+        "message": "Language",
+        "description": "Language selector label"
+    },
+    "english": {
+        "message": "English",
+        "description": "English language option"
+    },
+    "chinese": {
+        "message": "Chinese",
+        "description": "Chinese language option"
+    },
+    "tabGeneral": {
+        "message": "General Settings",
+        "description": "General settings tab"
+    },
+    "tabRules": {
+        "message": "Rules Management",
+        "description": "Rules management tab"
+    },
+    "tabImportExport": {
+        "message": "Import/Export",
+        "description": "Import/Export tab"
+    },
+    "redirectDelay": {
+        "message": "Redirect Delay (ms)",
+        "description": "Redirect delay setting label"
+    },
+    "currentUrl": {
+        "message": "Current URL",
+        "description": "Current URL label"
+    },
+    "extensionOptions": {
+        "message": "URL Switch Options",
+        "description": "Extension options page title"
+    },
+    "languageChangeInstructions": {
+        "message": "Note: To change the extension's display language, you need to change your browser's language settings. This language preference has been saved for reference only.",
+        "description": "Instructions for changing the display language in Chrome"
+    },
+    "languagePreference": {
+        "message": "Language Preference (browser settings control actual display)",
+        "description": "Language preference label with clarification"
+    },
+    "currentLanguage": {
+        "message": "Current browser language",
+        "description": "The current browser language label"
+    },
+    "browserSettings": {
+        "message": "To change display language, go to Chrome Settings > Languages",
+        "description": "Browser settings navigation instructions"
+    }
+}

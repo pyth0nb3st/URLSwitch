@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RuleGroup, Settings } from '../types';
+import { useTranslation } from '../hooks/useTranslation';
 
 // Import components
 import Loading from './components/Loading';
@@ -11,6 +12,7 @@ import ImportExport from './components/ImportExport';
 
 // Main Options Page Component
 const OptionsPage: React.FC = () => {
+    const { t } = useTranslation();
     const [settings, setSettings] = useState<Settings | null>(null);
     const [ruleGroups, setRuleGroups] = useState<RuleGroup[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,6 +32,21 @@ const OptionsPage: React.FC = () => {
         };
 
         loadData();
+
+        // Listen for settings changes
+        const handleStorageChange = (changes: any) => {
+            if (changes.settings) {
+                setSettings(changes.settings.newValue);
+            }
+            if (changes.ruleGroups) {
+                setRuleGroups(changes.ruleGroups.newValue);
+            }
+        };
+
+        chrome.storage.onChanged.addListener(handleStorageChange);
+        return () => {
+            chrome.storage.onChanged.removeListener(handleStorageChange);
+        };
     }, []);
 
     const handleToggleExtension = () => {
@@ -109,7 +126,7 @@ const OptionsPage: React.FC = () => {
 
     return (
         <div className="container mx-auto p-4 max-w-4xl">
-            <h1 className="text-2xl font-bold mb-6">URL Switch Options</h1>
+            <h1 className="text-2xl font-bold mb-6">{t('appName')}</h1>
 
             <TabNav activeTab={activeTab} onTabChange={setActiveTab} />
 

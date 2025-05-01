@@ -1,10 +1,12 @@
 import { RuleGroup, Settings } from '../types';
+import { getCurrentLanguage } from '../utils/i18n';
 
 // Default settings
 export const DEFAULT_SETTINGS: Settings = {
     enabled: true,
     autoRedirect: false,
     redirectDelay: 1000,
+    language: getCurrentLanguage(),
 };
 
 export const DEFAULT_RULE_GROUPS: RuleGroup[] = [

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Settings } from '../../types';
+import { Settings, LanguageCode } from '../../types';
 import ToggleSwitch from './ToggleSwitch';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface GeneralSettingsProps {
     settings: Settings;
@@ -15,13 +17,21 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
     onToggleAutoRedirect,
     onRedirectDelayChange
 }) => {
+    const { t, changeLanguage } = useTranslation();
+
+    const handleLanguageChange = (language: LanguageCode) => {
+        if (language !== settings.language) {
+            changeLanguage(language);
+        }
+    };
+
     return (
         <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-lg font-semibold mb-4">General Settings</h2>
+            <h2 className="text-lg font-semibold mb-4">{t('settings')}</h2>
 
             <div className="mb-4">
                 <div className="flex justify-between items-center py-3">
-                    <span>Extension Enabled</span>
+                    <span>{t('enabled')}</span>
                     <ToggleSwitch
                         enabled={settings.enabled}
                         onChange={onToggleExtension}
@@ -29,7 +39,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                 </div>
 
                 <div className="flex justify-between items-center py-3 border-t">
-                    <span>Auto Redirect</span>
+                    <span>{t('autoRedirect')}</span>
                     <ToggleSwitch
                         enabled={settings.autoRedirect}
                         onChange={onToggleAutoRedirect}
@@ -37,7 +47,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                 </div>
 
                 <div className="flex justify-between items-center py-3 border-t">
-                    <span>Redirect Delay (ms)</span>
+                    <span>{t('redirectDelay')}</span>
                     <input
                         type="number"
                         value={settings.redirectDelay}
@@ -45,6 +55,14 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
                         className="border rounded p-1 w-24 text-right"
                         min="0"
                         max="10000"
+                    />
+                </div>
+
+                <div className="flex justify-between items-start py-3 border-t">
+                    <span>{t('languagePreference')}</span>
+                    <LanguageSelector
+                        preferredLanguage={settings.language || 'en'}
+                        onLanguageChange={handleLanguageChange}
                     />
                 </div>
             </div>

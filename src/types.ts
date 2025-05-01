@@ -16,11 +16,15 @@ export interface RuleGroup {
     rules: Rule[];
 }
 
+// Supported language codes
+export type LanguageCode = 'en' | 'zh_CN';
+
 // Global settings for the extension
 export interface Settings {
     enabled: boolean;
     autoRedirect: boolean;
     redirectDelay: number;
+    language: LanguageCode;
 }
 
 // Result of matching a URL against rules
