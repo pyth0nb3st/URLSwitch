@@ -13,6 +13,7 @@ interface RuleGroupItemProps {
     onSaveRule: (groupId: string, rule: Omit<Rule, 'id'>, createReverse: boolean) => void;
     onUpdateRule: (groupId: string, rule: Rule) => void;
     onDeleteRule: (groupId: string, ruleId: string) => void;
+    onCreateReverseRule: (groupId: string, rule: Rule) => void;
 }
 
 const RuleGroupItem: React.FC<RuleGroupItemProps> = ({
@@ -23,7 +24,8 @@ const RuleGroupItem: React.FC<RuleGroupItemProps> = ({
     onDeleteGroup,
     onSaveRule,
     onUpdateRule,
-    onDeleteRule
+    onDeleteRule,
+    onCreateReverseRule
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isAddingRule, setIsAddingRule] = useState(false);
@@ -122,6 +124,7 @@ const RuleGroupItem: React.FC<RuleGroupItemProps> = ({
                                     onToggle={onToggleRule}
                                     onEdit={handleEditRule}
                                     onDelete={onDeleteRule}
+                                    onCreateReverse={onCreateReverseRule}
                                 />
                             ))}
                         </div>

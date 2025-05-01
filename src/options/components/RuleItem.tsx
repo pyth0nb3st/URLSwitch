@@ -8,6 +8,7 @@ interface RuleItemProps {
     onToggle: (groupId: string, ruleId: string) => void;
     onEdit: (groupId: string, rule: Rule) => void;
     onDelete: (groupId: string, ruleId: string) => void;
+    onCreateReverse: (groupId: string, rule: Rule) => void;
 }
 
 const RuleItem: React.FC<RuleItemProps> = ({
@@ -15,7 +16,8 @@ const RuleItem: React.FC<RuleItemProps> = ({
     groupId,
     onToggle,
     onEdit,
-    onDelete
+    onDelete,
+    onCreateReverse
 }) => {
     return (
         <div className="flex justify-between items-center p-2 border-b last:border-b-0 hover:bg-gray-50">
@@ -28,6 +30,16 @@ const RuleItem: React.FC<RuleItemProps> = ({
             </div>
 
             <div className="flex items-center space-x-3">
+                <button
+                    onClick={() => onCreateReverse(groupId, rule)}
+                    className="text-gray-500 hover:text-green-500"
+                    title="Create reverse rule"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m-8 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                </button>
+
                 <button
                     onClick={() => onEdit(groupId, rule)}
                     className="text-gray-500 hover:text-blue-500"

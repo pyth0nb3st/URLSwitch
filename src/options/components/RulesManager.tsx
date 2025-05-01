@@ -84,6 +84,79 @@ const RulesManager: React.FC<RulesManagerProps> = ({ ruleGroups, onUpdateRuleGro
         onUpdateRuleGroups(updatedGroups);
     };
 
+    // 从域名提取可读名称（去除正则转义）
+    const extractReadableDomain = (domain: string): string => {
+        return domain.replace(/\\\./g, '.');
+    };
+
+    // 根据from和to域名生成规则名称
+    const generateRuleNameFromDomains = (fromDomain: string, toDomain: string): string => {
+        return `${fromDomain} → ${toDomain}`;
+    };
+
+    // 创建一个规则的反向版本
+    const handleCreateReverseRule = (groupId: string, rule: Rule) => {
+        const updatedGroups = ruleGroups.map(group => {
+            if (group.id !== groupId) return group;
+
+            // 检查是否是简单域名模式
+            const fromDomainMatch = rule.fromPattern.match(/^\^https\?:\/\/([^/]+)\/\(\.\*\)\$$/);
+            const toDomainMatch = rule.toPattern.match(/^https:\/\/([^/]+)\/\$1$/);
+
+            let reverseRule: Rule;
+
+            if (fromDomainMatch && toDomainMatch) {
+                // 简单域名模式 - 交换域名
+                const fromDomain = extractReadableDomain(fromDomainMatch[1]);
+                const toDomain = toDomainMatch[1];
+
+                // 生成反向规则的名称
+                const reverseName = generateRuleNameFromDomains(toDomain, fromDomain);
+
+                // 反向规则需要交换域名
+                const reverseFromDomain = toDomain.replace(/\./g, '\\.');
+
+                reverseRule = {
+                    id: uuidv4(),
+                    name: reverseName,
+                    fromPattern: `^https?://${reverseFromDomain}/(.*)$`,
+                    toPattern: `https://${fromDomain}/$1`,
+                    priority: rule.priority,
+                    enabled: rule.enabled
+                };
+            } else {
+                // 复杂正则模式 - 尝试从现有规则名称推断方向
+                const parts = rule.name.split(' → ');
+                let reverseName: string;
+
+                if (parts.length === 2) {
+                    // 如果名称已经使用了箭头格式，交换两部分
+                    reverseName = `${parts[1]} → ${parts[0]}`;
+                } else {
+                    // 否则就简单地加上时间戳
+                    reverseName = `${rule.name} (Reversed ${new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-')})`;
+                }
+
+                reverseRule = {
+                    id: uuidv4(),
+                    name: reverseName,
+                    fromPattern: rule.toPattern.replace(/\$(\d+)/g, '___$$$1___'),
+                    toPattern: rule.fromPattern.replace(/\(([^)]+)\)/g, '$$$1'),
+                    priority: rule.priority,
+                    enabled: rule.enabled
+                };
+
+                // 修复正则表达式中的替换模式
+                reverseRule.fromPattern = reverseRule.fromPattern.replace(/___\$(\d+)___/g, '$$$1');
+            }
+
+            // 添加反向规则到组中
+            return { ...group, rules: [...group.rules, reverseRule] };
+        });
+
+        onUpdateRuleGroups(updatedGroups);
+    };
+
     // 添加新规则（并可选创建反向规则）
     const handleSaveRule = (groupId: string, ruleData: Omit<Rule, 'id'>, createReverse: boolean) => {
         const updatedGroups = ruleGroups.map(group => {
@@ -99,16 +172,17 @@ const RulesManager: React.FC<RulesManagerProps> = ({ ruleGroups, onUpdateRuleGro
 
             // 如果需要创建反向规则
             if (createReverse) {
-                const reverseName = `${ruleData.name} (Reverse)`;
-
                 // Check if this is a domain-switching pattern
                 const fromDomainMatch = ruleData.fromPattern.match(/^\^https\?:\/\/([^/]+)\/\(\.\*\)\$$/);
                 const toDomainMatch = ruleData.toPattern.match(/^https:\/\/([^/]+)\/\$1$/);
 
                 if (fromDomainMatch && toDomainMatch) {
                     // Simple domain switching - create reverse rule with swapped domains
-                    const fromDomain = fromDomainMatch[1].replace(/\\\./g, '.');
+                    const fromDomain = extractReadableDomain(fromDomainMatch[1]);
                     const toDomain = toDomainMatch[1];
+
+                    // 生成反向规则的名称
+                    const reverseName = generateRuleNameFromDomains(toDomain, fromDomain);
 
                     // For the reverse rule, we swap the domains
                     const reverseFromDomain = toDomain.replace(/\./g, '\\.');
@@ -124,6 +198,18 @@ const RulesManager: React.FC<RulesManagerProps> = ({ ruleGroups, onUpdateRuleGro
 
                     updatedRules.push(reverseRule);
                 } else {
+                    // 复杂正则模式 - 尝试从现有规则名称推断方向
+                    const parts = ruleData.name.split(' → ');
+                    let reverseName: string;
+
+                    if (parts.length === 2) {
+                        // 如果名称已经使用了箭头格式，交换两部分
+                        reverseName = `${parts[1]} → ${parts[0]}`;
+                    } else {
+                        // 否则使用原名称加上 Reversed 后缀
+                        reverseName = `${ruleData.name} (Reversed)`;
+                    }
+
                     // Complex pattern - use the existing logic
                     const reverseRule: Rule = {
                         id: uuidv4(),
@@ -224,6 +310,7 @@ const RulesManager: React.FC<RulesManagerProps> = ({ ruleGroups, onUpdateRuleGro
                             onSaveRule={handleSaveRule}
                             onUpdateRule={handleUpdateRule}
                             onDeleteRule={handleDeleteRule}
+                            onCreateReverseRule={handleCreateReverseRule}
                         />
                     ))}
                 </div>

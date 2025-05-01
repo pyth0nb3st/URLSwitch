@@ -26,6 +26,7 @@ const RuleForm: React.FC<RuleFormProps> = ({
     const [enabled, setEnabled] = useState(true);
     const [createReverse, setCreateReverse] = useState(true);
     const [patternError, setPatternError] = useState('');
+    const [autoGenerateName, setAutoGenerateName] = useState(true);
 
     // 当编辑现有规则时，加载规则数据
     useEffect(() => {
@@ -54,6 +55,13 @@ const RuleForm: React.FC<RuleFormProps> = ({
             }
         }
     }, [rule]);
+
+    // 当域名更改时自动更新规则名称
+    useEffect(() => {
+        if (autoGenerateName && formMode === 'simple' && fromDomain && toDomain) {
+            setName(`${fromDomain} → ${toDomain}`);
+        }
+    }, [autoGenerateName, formMode, fromDomain, toDomain]);
 
     // 测试正则表达式是否有效
     const testPattern = (pattern: string): boolean => {
@@ -130,6 +138,25 @@ const RuleForm: React.FC<RuleFormProps> = ({
         onSave(groupId, newRule, createReverse && !rule);
     };
 
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+        setAutoGenerateName(false);
+    };
+
+    const handleFromDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFromDomain(e.target.value);
+        if (autoGenerateName) {
+            setName(`${e.target.value} → ${toDomain}`);
+        }
+    };
+
+    const handleToDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setToDomain(e.target.value);
+        if (autoGenerateName) {
+            setName(`${fromDomain} → ${e.target.value}`);
+        }
+    };
+
     return (
         <div className="bg-white p-5 rounded-lg border shadow-sm">
             <h3 className="text-lg font-medium mb-4">
@@ -138,17 +165,6 @@ const RuleForm: React.FC<RuleFormProps> = ({
             </h3>
 
             <div className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Rule Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        placeholder="e.g., GitHub to GitHub Dev"
-                    />
-                </div>
-
                 <div className="flex space-x-4 mb-2">
                     <button
                         type="button"
@@ -180,7 +196,7 @@ const RuleForm: React.FC<RuleFormProps> = ({
                             <input
                                 type="text"
                                 value={fromDomain}
-                                onChange={(e) => setFromDomain(e.target.value)}
+                                onChange={handleFromDomainChange}
                                 className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                                 placeholder="e.g., github.com"
                             />
@@ -193,15 +209,48 @@ const RuleForm: React.FC<RuleFormProps> = ({
                             <input
                                 type="text"
                                 value={toDomain}
-                                onChange={(e) => setToDomain(e.target.value)}
+                                onChange={handleToDomainChange}
                                 className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                                 placeholder="e.g., github.dev"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                                <span>Rule Name</span>
+                                <span className="text-xs text-gray-500">
+                                    <input
+                                        type="checkbox"
+                                        checked={autoGenerateName}
+                                        onChange={() => setAutoGenerateName(!autoGenerateName)}
+                                        className="mr-1"
+                                    />
+                                    Auto-generate
+                                </span>
+                            </label>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={handleNameChange}
+                                className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                placeholder="e.g., GitHub to GitHub Dev"
                             />
                         </div>
                     </>
                 ) : (
                     // Advanced regex mode
                     <>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Rule Name</label>
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={handleNameChange}
+                                className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                placeholder="e.g., GitHub to GitHub Dev"
+                            />
+                        </div>
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 From Pattern (RegEx)
