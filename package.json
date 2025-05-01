@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "Chrome extension for bidirectional URL switching and redirection",
     "type": "module",
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build && node copy-icons.js",
@@ -29,7 +32,6 @@
         "@typescript-eslint/parser": "^6.6.0",
         "@vitejs/plugin-react": "^4.0.4",
         "autoprefixer": "^10.4.15",
-        "chrome-extension-cli": "^1.1.1",
         "eslint": "^8.49.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-react": "^7.33.2",

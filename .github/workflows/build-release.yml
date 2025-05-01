@@ -21,11 +21,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18.x'
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         
       - name: Build extension
         run: npm run build
@@ -36,11 +36,11 @@ jobs:
           zip -r ../url-switch.zip .
           cd ..
           
+      - name: Install crx packaging tool
+        run: npm install -g crx
+          
       - name: Generate CRX file
         run: |
-          # Install Chrome Extension CLI
-          npm install -g chrome-extension-cli
-          
           # Generate private key if it doesn't exist (first run only)
           if [ ! -f key.pem ]; then
             openssl genrsa -out key.pem 2048
