@@ -36,11 +36,27 @@ interface UseRuleFormResult {
     validateForm: () => boolean;
 }
 
+// 检查是否为简单域名规则
+const isSimpleDomainRule = (fromPattern: string, toPattern: string): boolean => {
+    try {
+        // 严格检查fromPattern格式: 应该是"^https?://domain\.com/(.*)$"形式
+        const fromMatch = fromPattern.match(/^\^https\?:\/\/([a-zA-Z0-9\\.\-]+)\/\(\.\*\)\$$/);
+
+        // 严格检查toPattern格式: 应该是"https://domain.com/$1"形式
+        const toMatch = toPattern.match(/^https:\/\/([a-zA-Z0-9.\-]+)\/\$1$/);
+
+        return !!(fromMatch && toMatch);
+    } catch (e) {
+        return false;
+    }
+};
+
 export function useRuleForm({
     rule,
     onSave,
     groupId
 }: UseRuleFormProps): UseRuleFormResult {
+    // 初始化为简单模式，但当加载复杂规则时会自动切换到高级模式
     const [formMode, setFormMode] = useState<'advanced' | 'simple'>('simple');
     const [name, setName] = useState('');
     const [fromPattern, setFromPattern] = useState('');
@@ -63,23 +79,61 @@ export function useRuleForm({
             setEnabled(rule.enabled);
             setCreateReverse(false); // 编辑现有规则时，默认不创建反向规则
 
-            // Try to detect if this is a simple domain rule
-            try {
-                const fromDomainMatch = rule.fromPattern.match(/^\^https\?:\/\/([^/]+)/);
-                const toDomainMatch = rule.toPattern.match(/^https:\/\/([^/]+)/);
+            // 检测是否为简单域名规则
+            if (isSimpleDomainRule(rule.fromPattern, rule.toPattern)) {
+                try {
+                    const fromDomainMatch = rule.fromPattern.match(/^\^https\?:\/\/([^/]+)/);
+                    const toDomainMatch = rule.toPattern.match(/^https:\/\/([^/]+)/);
 
-                if (fromDomainMatch && toDomainMatch) {
-                    setFromDomain(fromDomainMatch[1].replace(/\\\./g, '.'));
-                    setToDomain(toDomainMatch[1]);
-                    setFormMode('simple');
-                } else {
+                    if (fromDomainMatch && toDomainMatch) {
+                        setFromDomain(fromDomainMatch[1].replace(/\\\./g, '.'));
+                        setToDomain(toDomainMatch[1]);
+                        setFormMode('simple');
+                    } else {
+                        setFormMode('advanced');
+                    }
+                } catch (e) {
                     setFormMode('advanced');
                 }
-            } catch (e) {
+            } else {
+                // 非简单域名规则使用高级模式
                 setFormMode('advanced');
             }
         }
     }, [rule]);
+
+    // 切换表单模式并处理相关字段
+    const handleFormModeChange = (mode: 'advanced' | 'simple') => {
+        if (mode === 'advanced' && formMode === 'simple' && (!fromPattern || !toPattern)) {
+            // 如果是从简单模式切到高级模式，且高级模式还没有值，则尝试从简单模式生成
+            if (fromDomain && toDomain) {
+                const escapedFromDomain = fromDomain.replace(/\./g, '\\.');
+                setFromPattern(`^https?://${escapedFromDomain}/(.*)$`);
+                setToPattern(`https://${toDomain}/$1`);
+            }
+        } else if (mode === 'simple' && formMode === 'advanced') {
+            // 当从高级模式切换到简单模式时，尝试解析高级模式的模式
+            try {
+                const fromDomainMatch = fromPattern.match(/^\^https\?:\/\/([^/]+)/);
+                const toDomainMatch = toPattern.match(/^https:\/\/([^/]+)/);
+
+                if (fromDomainMatch && toDomainMatch) {
+                    setFromDomain(fromDomainMatch[1].replace(/\\\./g, '.'));
+                    setToDomain(toDomainMatch[1]);
+                } else {
+                    // 如果无法解析，清空简单模式字段
+                    setFromDomain('');
+                    setToDomain('');
+                }
+            } catch (e) {
+                // 解析失败时清空简单模式字段
+                setFromDomain('');
+                setToDomain('');
+            }
+        }
+
+        setFormMode(mode);
+    };
 
     // 当域名更改时自动更新规则名称
     useEffect(() => {
@@ -101,24 +155,46 @@ export function useRuleForm({
     // 验证表单
     const validateForm = (): boolean => {
         if (!name.trim()) {
-            setPatternError('Name is required');
+            setPatternError('规则名称不能为空');
             return false;
         }
 
         if (formMode === 'simple') {
             if (!fromDomain.trim() || !toDomain.trim()) {
-                setPatternError('Both domains are required');
+                setPatternError('源域名和目标域名都必须填写');
                 return false;
             }
         } else {
+            // Advanced mode validation
             if (!fromPattern.trim() || !toPattern.trim()) {
-                setPatternError('Both patterns are required');
+                setPatternError('源模式和目标模式都必须填写');
                 return false;
             }
 
             if (!testPattern(fromPattern)) {
-                setPatternError('From pattern is not a valid regular expression');
+                setPatternError('源模式不是有效的正则表达式');
                 return false;
+            }
+
+            try {
+                // Test if the to pattern contains valid references
+                const regexGroups = new RegExp(fromPattern).exec('test');
+                if (regexGroups && toPattern.includes('$')) {
+                    const maxGroupNumber = regexGroups.length - 1;
+                    const usedGroups = toPattern.match(/\$(\d+)/g);
+
+                    if (usedGroups) {
+                        for (const group of usedGroups) {
+                            const groupNumber = parseInt(group.substring(1));
+                            if (groupNumber > maxGroupNumber) {
+                                setPatternError(`引用 ${group} 超出了源模式中的捕获组数量`);
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                // If there's an error, we've already caught it in the previous check
             }
         }
 
@@ -150,6 +226,12 @@ export function useRuleForm({
             const { from, to } = generatePatterns();
             finalFromPattern = from;
             finalToPattern = to;
+        }
+
+        // 确保高级模式下的模式有值
+        if (formMode === 'advanced' && (!finalFromPattern || !finalToPattern)) {
+            setPatternError('高级模式下必须填写完整的正则表达式模式');
+            return;
         }
 
         const newRule: Omit<Rule, 'id'> = {
@@ -194,7 +276,7 @@ export function useRuleForm({
         createReverse,
         patternError,
         autoGenerateName,
-        setFormMode,
+        setFormMode: handleFormModeChange,
         handleNameChange,
         handleFromDomainChange,
         handleToDomainChange,
