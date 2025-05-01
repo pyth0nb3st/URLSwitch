@@ -36,7 +36,7 @@ A powerful browser extension for bidirectional URL switching and redirection bet
 1. **Clone this repository**
    ```bash
    git clone https://github.com/pyth0nb3st/URLSwitch.git
-   cd url-switch
+   cd URLSwitch
    ```
 
 2. **Install dependencies**
