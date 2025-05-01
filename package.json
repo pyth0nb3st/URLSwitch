@@ -9,7 +9,11 @@
         "test": "jest",
         "lint": "eslint --ext .ts,.tsx src/",
         "format": "prettier --write \"src/**/*.{ts,tsx,css,html}\"",
-        "watch": "web-ext run --source-dir=dist"
+        "watch": "web-ext run --source-dir=dist",
+        "release:patch": "node version-bump.js patch",
+        "release:minor": "node version-bump.js minor",
+        "release:major": "node version-bump.js major",
+        "package": "cd dist && zip -r ../url-switch.zip . && cd .. && crx pack dist -o url-switch.crx"
     },
     "dependencies": {
         "react": "^18.2.0",
@@ -25,6 +29,7 @@
         "@typescript-eslint/parser": "^6.6.0",
         "@vitejs/plugin-react": "^4.0.4",
         "autoprefixer": "^10.4.15",
+        "chrome-extension-cli": "^1.1.1",
         "eslint": "^8.49.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-react": "^7.33.2",

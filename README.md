@@ -27,6 +27,14 @@ A powerful browser extension for bidirectional URL switching and redirection bet
 
 ## 📥 Installation
 
+### From GitHub Releases
+
+1. Go to the [Releases](https://github.com/pyth0nb3st/URLSwitch/releases) page
+2. Download the latest `.crx` file
+3. Open Chrome and navigate to `chrome://extensions`
+4. Enable "Developer mode" in the top-right corner
+5. Drag and drop the downloaded `.crx` file into the Chrome window
+
 ### From Chrome Web Store (Coming Soon)
 
 *URL Switch will be available in the Chrome Web Store soon.*
@@ -101,6 +109,7 @@ This converts `https://github.com/username/repo` to `https://github.dev/username
   - `/utils` - Utility functions
   - `/_locales` - Localization files
 - `/icons` - Extension icons
+- `/.github/workflows` - CI/CD configuration
 
 ## 🛠️ Development
 
@@ -115,13 +124,47 @@ Start the development server:
 npm run dev
 ```
 
-### Tech Stack
+### Building and Packaging
 
-- TypeScript
-- React
-- TailwindCSS
-- Chrome Extension Manifest V3
-- Vite (build system)
+Build the extension:
+```bash
+npm run build
+```
+
+Package the extension as a zip and crx file:
+```bash
+npm run package
+```
+
+### Releasing New Versions
+
+The project includes automated versioning and release scripts:
+
+```bash
+# For patch version (1.0.0 -> 1.0.1)
+npm run release:patch
+
+# For minor version (1.0.0 -> 1.1.0)
+npm run release:minor
+
+# For major version (1.0.0 -> 2.0.0)
+npm run release:major
+```
+
+These commands will:
+1. Update the version in manifest.json
+2. Commit the changes
+3. Create a git tag
+4. Push to GitHub
+5. Trigger the CI/CD pipeline to build and create a release
+
+### CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and delivery:
+
+- Automatically builds the extension on pushes to main branch
+- Creates releases with packaged .crx and .zip files when a new tag is pushed
+- Generates release notes automatically
 
 ## 👥 Contributing
 

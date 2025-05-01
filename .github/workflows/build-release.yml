@@ -1,0 +1,70 @@
+name: Build and Release Extension
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed to create releases
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build extension
+        run: npm run build
+      
+      - name: Package extension as ZIP
+        run: |
+          cd dist
+          zip -r ../url-switch.zip .
+          cd ..
+          
+      - name: Generate CRX file
+        run: |
+          # Install Chrome Extension CLI
+          npm install -g chrome-extension-cli
+          
+          # Generate private key if it doesn't exist (first run only)
+          if [ ! -f key.pem ]; then
+            openssl genrsa -out key.pem 2048
+          fi
+          
+          # Build CRX using the private key
+          crx pack dist -o url-switch.crx -p key.pem
+        
+      - name: Create GitHub Release
+        id: create_release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            url-switch.zip
+            url-switch.crx
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: extension-files
+          path: |
+            url-switch.zip
+            url-switch.crx 
