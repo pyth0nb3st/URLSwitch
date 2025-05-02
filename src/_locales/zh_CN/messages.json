@@ -90,5 +90,185 @@
     "browserSettings": {
         "message": "要更改显示语言，请前往Chrome设置 > 语言",
         "description": "Browser settings navigation instructions"
+    },
+    "ruleNameRequired": {
+        "message": "规则名称不能为空",
+        "description": "Error message when rule name is missing"
+    },
+    "bothDomainsRequired": {
+        "message": "源域名和目标域名都必须填写",
+        "description": "Error message when domains are missing"
+    },
+    "bothPatternsRequired": {
+        "message": "源模式和目标模式都必须填写",
+        "description": "Error message when patterns are missing"
+    },
+    "invalidRegexPattern": {
+        "message": "源模式不是有效的正则表达式",
+        "description": "Error message when regex pattern is invalid"
+    },
+    "groupReferenceExceedsCount": {
+        "message": "引用 $1 超出了源模式中的捕获组数量",
+        "description": "Error message when group reference exceeds count"
+    },
+    "advancedModePatternRequired": {
+        "message": "高级模式下必须填写完整的正则表达式模式",
+        "description": "Error message when advanced mode patterns are missing"
+    },
+    "confirmConvertToAdvanced": {
+        "message": "确认将简单规则转换为高级模式?",
+        "description": "Confirmation message for converting to advanced mode"
+    },
+    "from": {
+        "message": "从",
+        "description": "From label in confirmation dialog"
+    },
+    "willGeneratePatterns": {
+        "message": "将生成以下正则表达式模式",
+        "description": "Message about regex pattern generation"
+    },
+    "sourcePattern": {
+        "message": "源模式",
+        "description": "Source pattern label"
+    },
+    "targetPattern": {
+        "message": "目标模式",
+        "description": "Target pattern label"
+    },
+    "editRule": {
+        "message": "编辑规则",
+        "description": "Edit rule heading"
+    },
+    "addNewRule": {
+        "message": "添加新规则",
+        "description": "Add new rule heading"
+    },
+    "simpleMode": {
+        "message": "简单模式",
+        "description": "Simple mode label"
+    },
+    "domainOnly": {
+        "message": "仅域名转换",
+        "description": "Domain only indicator"
+    },
+    "advancedMode": {
+        "message": "高级模式",
+        "description": "Advanced mode label"
+    },
+    "convertToAdvanced": {
+        "message": "转换为高级模式",
+        "description": "Convert to advanced mode button"
+    },
+    "advancedRuleCannotUseSimpleMode": {
+        "message": "此规则使用了高级正则表达式，不能用简单模式编辑",
+        "description": "Message when advanced rule can't use simple mode"
+    },
+    "prioritySettings": {
+        "message": "优先级设置",
+        "description": "Priority settings heading"
+    },
+    "important": {
+        "message": "重要",
+        "description": "Important label"
+    },
+    "priorityDescription": {
+        "message": "优先级决定规则的匹配顺序。当多个规则都能匹配同一个URL时，优先级较高的规则将被使用。",
+        "description": "Description of priority functionality"
+    },
+    "priority": {
+        "message": "优先级",
+        "description": "Priority label"
+    },
+    "priorityHint": {
+        "message": "数字越小优先级越高",
+        "description": "Hint about priority values"
+    },
+    "createReverseRule": {
+        "message": "同时创建反向规则",
+        "description": "Create reverse rule checkbox label"
+    },
+    "cancel": {
+        "message": "取消",
+        "description": "Cancel button text"
+    },
+    "updateRule": {
+        "message": "更新规则",
+        "description": "Update rule button text"
+    },
+    "addRule": {
+        "message": "添加规则",
+        "description": "Add rule button text"
+    },
+    "fromDomain": {
+        "message": "源域名",
+        "description": "From domain label in simple rule form"
+    },
+    "toDomain": {
+        "message": "目标域名",
+        "description": "To domain label in simple rule form"
+    },
+    "ruleName": {
+        "message": "规则名称",
+        "description": "Rule name label"
+    },
+    "autoGenerate": {
+        "message": "自动生成",
+        "description": "Auto-generate checkbox label"
+    },
+    "domainPlaceholderFrom": {
+        "message": "例如：github.com",
+        "description": "Placeholder for from domain input"
+    },
+    "domainPlaceholderTo": {
+        "message": "例如：github.dev",
+        "description": "Placeholder for to domain input"
+    },
+    "ruleNamePlaceholder": {
+        "message": "例如：GitHub到GitHub Dev",
+        "description": "Placeholder for rule name input"
+    },
+    "ruleNamePlaceholderAdvanced": {
+        "message": "例如：GitHub到GitHub Dev",
+        "description": "Placeholder for rule name input in advanced mode"
+    },
+    "regexLabel": {
+        "message": "正则表达式",
+        "description": "RegEx label"
+    },
+    "usedForMatching": {
+        "message": "用于匹配URL",
+        "description": "Description for source pattern"
+    },
+    "usedForRedirect": {
+        "message": "用于构建重定向URL",
+        "description": "Description for target pattern"
+    },
+    "sourcePatternPlaceholder": {
+        "message": "例如：^https?://github\\.com/([^/]+/[^/]+)(?:/.*)?$",
+        "description": "Placeholder for source pattern input"
+    },
+    "targetPatternPlaceholder": {
+        "message": "例如：https://github.dev/$1",
+        "description": "Placeholder for target pattern input"
+    },
+    "regexCaptureGroupHint": {
+        "message": "使用正则表达式捕获组 () 来捕获URL中的部分，以便在目标URL中使用",
+        "description": "Hint about regex capture groups"
+    },
+    "regexExample": {
+        "message": "例如",
+        "description": "Example label"
+    },
+    "regexExampleExplanation": {
+        "message": "可以捕获域名和路径",
+        "description": "Explanation for regex example"
+    },
+    "regexReferenceHint": {
+        "message": "使用 $1, $2 等引用源模式中的捕获组",
+        "description": "Hint about regex references"
+    },
+    "regexReferenceExampleExplanation": {
+        "message": "将使用源URL的路径",
+        "description": "Explanation for regex reference example"
     }
 }

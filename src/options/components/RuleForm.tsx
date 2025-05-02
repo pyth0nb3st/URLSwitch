@@ -3,6 +3,7 @@ import { useRuleForm } from '../hooks/useRuleForm';
 import { Rule } from '../../types';
 import SimpleRuleForm from './SimpleRuleForm';
 import AdvancedRuleForm from './AdvancedRuleForm';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface RuleFormProps {
     rule?: Rule;
@@ -16,6 +17,8 @@ interface RuleFormProps {
 }
 
 const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) => {
+    const { t } = useTranslation();
+
     const {
         formMode,
         name,
@@ -43,11 +46,11 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
     const convertToAdvanced = () => {
         if (formMode === 'simple' && fromDomain && toDomain) {
             const confirmMessage =
-                `确认将简单规则转换为高级模式?\n\n` +
-                `从: ${fromDomain} → ${toDomain}\n\n` +
-                `将生成以下正则表达式模式:\n` +
-                `源模式: ^https?://${fromDomain.replace(/\./g, '\\.')}/(.*)$\n` +
-                `目标模式: https://${toDomain}/$1\n`;
+                `${t('confirmConvertToAdvanced')}\n\n` +
+                `${t('from')}: ${fromDomain} → ${toDomain}\n\n` +
+                `${t('willGeneratePatterns')}:\n` +
+                `${t('sourcePattern')}: ^https?://${fromDomain.replace(/\./g, '\\.')}/(.*)$\n` +
+                `${t('targetPattern')}: https://${toDomain}/$1\n`;
 
             if (confirm(confirmMessage)) {
                 setFormMode('advanced');
@@ -76,7 +79,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
     return (
         <div className="bg-white rounded shadow p-4 mb-4">
             <h3 className="text-lg font-semibold mb-4">
-                {rule ? '编辑规则' : '添加新规则'}
+                {rule ? t('editRule') : t('addNewRule')}
             </h3>
 
             <div className="mb-4">
@@ -94,8 +97,8 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                             htmlFor="mode-simple"
                             className={`${!isSimpleModeAvailable ? 'text-gray-400' : 'text-gray-700'}`}
                         >
-                            简单模式
-                            <span className="ml-2 text-xs text-gray-500">(仅域名转换)</span>
+                            {t('simpleMode')}
+                            <span className="ml-2 text-xs text-gray-500">({t('domainOnly')})</span>
                         </label>
                     </div>
 
@@ -108,7 +111,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                             className="mr-2"
                         />
                         <label htmlFor="mode-advanced" className="text-gray-700">
-                            高级模式
+                            {t('advancedMode')}
                             <span className="ml-2 text-xs text-gray-500">(RegEx)</span>
                         </label>
                     </div>
@@ -119,13 +122,13 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                             onClick={convertToAdvanced}
                             className="text-blue-600 text-sm hover:underline"
                         >
-                            转换为高级模式
+                            {t('convertToAdvanced')}
                         </button>
                     )}
 
                     {!isSimpleModeAvailable && formMode === 'advanced' && (
                         <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
-                            此规则使用了高级正则表达式，不能用简单模式编辑
+                            {t('advancedRuleCannotUseSimpleMode')}
                         </span>
                     )}
                 </div>
@@ -155,17 +158,17 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
 
                     <div className="bg-blue-50 p-3 rounded border border-blue-200">
                         <div className="flex items-start mb-2">
-                            <div className="font-medium text-blue-700">优先级设置</div>
-                            <div className="ml-1 text-xs text-blue-600 bg-blue-100 px-2 py-0.5 rounded">重要</div>
+                            <div className="font-medium text-blue-700">{t('prioritySettings')}</div>
+                            <div className="ml-1 text-xs text-blue-600 bg-blue-100 px-2 py-0.5 rounded">{t('important')}</div>
                         </div>
 
                         <div className="text-sm text-blue-700 mb-2">
-                            优先级决定规则的匹配顺序。当多个规则都能匹配同一个URL时，优先级较高的规则将被使用。
+                            {t('priorityDescription')}
                         </div>
 
                         <div className="flex items-center">
                             <label className="block text-sm font-medium text-gray-700 mr-2">
-                                优先级
+                                {t('priority')}
                             </label>
                             <input
                                 type="number"
@@ -175,7 +178,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                                 max="100"
                                 className="w-20 p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                             />
-                            <span className="ml-2 text-sm text-gray-500">数字越小优先级越高</span>
+                            <span className="ml-2 text-sm text-gray-500">{t('priorityHint')}</span>
                         </div>
                     </div>
 
@@ -189,7 +192,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                                 className="mr-2"
                             />
                             <label htmlFor="create-reverse" className="text-sm text-gray-700">
-                                同时创建反向规则
+                                {t('createReverseRule')}
                             </label>
                         </div>
                     )}
@@ -208,14 +211,14 @@ const RuleForm: React.FC<RuleFormProps> = ({ rule, onSave, groupId, onCancel }) 
                     onClick={onCancel}
                     className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
                 >
-                    取消
+                    {t('cancel')}
                 </button>
                 <button
                     type="button"
                     onClick={handleSave}
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
-                    {rule ? '更新规则' : '添加规则'}
+                    {rule ? t('updateRule') : t('addRule')}
                 </button>
             </div>
         </div>

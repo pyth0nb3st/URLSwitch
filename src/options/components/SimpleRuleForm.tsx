@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface SimpleRuleFormProps {
     fromDomain: string;
@@ -21,37 +22,39 @@ const SimpleRuleForm: React.FC<SimpleRuleFormProps> = ({
     onNameChange,
     onAutoGenerateChange
 }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                    From Domain
+                    {t('fromDomain')}
                 </label>
                 <input
                     type="text"
                     value={fromDomain}
                     onChange={onFromDomainChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="e.g., github.com"
+                    placeholder={t('domainPlaceholderFrom')}
                 />
             </div>
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                    To Domain
+                    {t('toDomain')}
                 </label>
                 <input
                     type="text"
                     value={toDomain}
                     onChange={onToDomainChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="e.g., github.dev"
+                    placeholder={t('domainPlaceholderTo')}
                 />
             </div>
 
             <div>
                 <label className="flex justify-between text-sm font-medium text-gray-700 mb-1">
-                    <span>Rule Name</span>
+                    <span>{t('ruleName')}</span>
                     <span className="text-xs text-gray-500">
                         <input
                             type="checkbox"
@@ -59,7 +62,7 @@ const SimpleRuleForm: React.FC<SimpleRuleFormProps> = ({
                             onChange={(e) => onAutoGenerateChange(e.target.checked)}
                             className="mr-1"
                         />
-                        Auto-generate
+                        {t('autoGenerate')}
                     </span>
                 </label>
                 <input
@@ -67,7 +70,7 @@ const SimpleRuleForm: React.FC<SimpleRuleFormProps> = ({
                     value={name}
                     onChange={onNameChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="e.g., GitHub to GitHub Dev"
+                    placeholder={t('ruleNamePlaceholder')}
                 />
             </div>
         </>

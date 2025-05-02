@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface AdvancedRuleFormProps {
     name: string;
@@ -17,52 +18,54 @@ const AdvancedRuleForm: React.FC<AdvancedRuleFormProps> = ({
     onFromPatternChange,
     onToPatternChange
 }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">规则名称</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('ruleName')}</label>
                 <input
                     type="text"
                     value={name}
                     onChange={onNameChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="例如：GitHub到GitHub Dev"
+                    placeholder={t('ruleNamePlaceholderAdvanced')}
                 />
             </div>
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                    源模式 (正则表达式)
-                    <span className="ml-2 text-xs text-gray-500">用于匹配URL</span>
+                    {t('sourcePattern')} ({t('regexLabel')})
+                    <span className="ml-2 text-xs text-gray-500">{t('usedForMatching')}</span>
                 </label>
                 <input
                     type="text"
                     value={fromPattern}
                     onChange={onFromPatternChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="例如：^https?://github\.com/([^/]+/[^/]+)(?:/.*)?$"
+                    placeholder={t('sourcePatternPlaceholder')}
                 />
                 <div className="mt-1 text-xs text-gray-500">
-                    <p>使用正则表达式捕获组 () 来捕获URL中的部分，以便在目标URL中使用</p>
-                    <p>例如：<code>^https?://([^/]+)/(.*)$</code> 可以捕获域名和路径</p>
+                    <p>{t('regexCaptureGroupHint')}</p>
+                    <p>{t('regexExample')}: <code>^https?://([^/]+)/(.*)$</code> {t('regexExampleExplanation')}</p>
                 </div>
             </div>
 
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                    目标模式
-                    <span className="ml-2 text-xs text-gray-500">用于构建重定向URL</span>
+                    {t('targetPattern')}
+                    <span className="ml-2 text-xs text-gray-500">{t('usedForRedirect')}</span>
                 </label>
                 <input
                     type="text"
                     value={toPattern}
                     onChange={onToPatternChange}
                     className="w-full p-2 border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    placeholder="例如：https://github.dev/$1"
+                    placeholder={t('targetPatternPlaceholder')}
                 />
                 <div className="mt-1 text-xs text-gray-500">
-                    <p>使用 $1, $2 等引用源模式中的捕获组</p>
-                    <p>例如：<code>https://newdomain.com/$2</code> 将使用源URL的路径</p>
+                    <p>{t('regexReferenceHint')}</p>
+                    <p>{t('regexExample')}: <code>https://newdomain.com/$2</code> {t('regexReferenceExampleExplanation')}</p>
                 </div>
             </div>
         </>

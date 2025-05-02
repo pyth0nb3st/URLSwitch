@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Rule } from '../../types';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface UseRuleFormProps {
     rule?: Rule;
@@ -56,6 +57,8 @@ export function useRuleForm({
     onSave,
     groupId
 }: UseRuleFormProps): UseRuleFormResult {
+    const { t } = useTranslation();
+
     // 初始化为简单模式，但当加载复杂规则时会自动切换到高级模式
     const [formMode, setFormMode] = useState<'advanced' | 'simple'>('simple');
     const [name, setName] = useState('');
@@ -155,24 +158,24 @@ export function useRuleForm({
     // 验证表单
     const validateForm = (): boolean => {
         if (!name.trim()) {
-            setPatternError('规则名称不能为空');
+            setPatternError(t('ruleNameRequired'));
             return false;
         }
 
         if (formMode === 'simple') {
             if (!fromDomain.trim() || !toDomain.trim()) {
-                setPatternError('源域名和目标域名都必须填写');
+                setPatternError(t('bothDomainsRequired'));
                 return false;
             }
         } else {
             // Advanced mode validation
             if (!fromPattern.trim() || !toPattern.trim()) {
-                setPatternError('源模式和目标模式都必须填写');
+                setPatternError(t('bothPatternsRequired'));
                 return false;
             }
 
             if (!testPattern(fromPattern)) {
-                setPatternError('源模式不是有效的正则表达式');
+                setPatternError(t('invalidRegexPattern'));
                 return false;
             }
 
@@ -187,7 +190,7 @@ export function useRuleForm({
                         for (const group of usedGroups) {
                             const groupNumber = parseInt(group.substring(1));
                             if (groupNumber > maxGroupNumber) {
-                                setPatternError(`引用 ${group} 超出了源模式中的捕获组数量`);
+                                setPatternError(t('groupReferenceExceedsCount', [group]));
                                 return false;
                             }
                         }
@@ -230,7 +233,7 @@ export function useRuleForm({
 
         // 确保高级模式下的模式有值
         if (formMode === 'advanced' && (!finalFromPattern || !finalToPattern)) {
-            setPatternError('高级模式下必须填写完整的正则表达式模式');
+            setPatternError(t('advancedModePatternRequired'));
             return;
         }
 

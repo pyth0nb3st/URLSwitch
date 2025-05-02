@@ -90,5 +90,185 @@
     "browserSettings": {
         "message": "To change display language, go to Chrome Settings > Languages",
         "description": "Browser settings navigation instructions"
+    },
+    "ruleNameRequired": {
+        "message": "Rule name cannot be empty",
+        "description": "Error message when rule name is missing"
+    },
+    "bothDomainsRequired": {
+        "message": "Both source domain and target domain are required",
+        "description": "Error message when domains are missing"
+    },
+    "bothPatternsRequired": {
+        "message": "Both source pattern and target pattern are required",
+        "description": "Error message when patterns are missing"
+    },
+    "invalidRegexPattern": {
+        "message": "Source pattern is not a valid regular expression",
+        "description": "Error message when regex pattern is invalid"
+    },
+    "groupReferenceExceedsCount": {
+        "message": "Reference $1 exceeds the number of capture groups in the source pattern",
+        "description": "Error message when group reference exceeds count"
+    },
+    "advancedModePatternRequired": {
+        "message": "Complete regular expression patterns are required in advanced mode",
+        "description": "Error message when advanced mode patterns are missing"
+    },
+    "confirmConvertToAdvanced": {
+        "message": "Confirm conversion to advanced mode?",
+        "description": "Confirmation message for converting to advanced mode"
+    },
+    "from": {
+        "message": "From",
+        "description": "From label in confirmation dialog"
+    },
+    "willGeneratePatterns": {
+        "message": "The following regex patterns will be generated",
+        "description": "Message about regex pattern generation"
+    },
+    "sourcePattern": {
+        "message": "Source pattern",
+        "description": "Source pattern label"
+    },
+    "targetPattern": {
+        "message": "Target pattern",
+        "description": "Target pattern label"
+    },
+    "editRule": {
+        "message": "Edit Rule",
+        "description": "Edit rule heading"
+    },
+    "addNewRule": {
+        "message": "Add New Rule",
+        "description": "Add new rule heading"
+    },
+    "simpleMode": {
+        "message": "Simple Mode",
+        "description": "Simple mode label"
+    },
+    "domainOnly": {
+        "message": "domain only",
+        "description": "Domain only indicator"
+    },
+    "advancedMode": {
+        "message": "Advanced Mode",
+        "description": "Advanced mode label"
+    },
+    "convertToAdvanced": {
+        "message": "Convert to advanced mode",
+        "description": "Convert to advanced mode button"
+    },
+    "advancedRuleCannotUseSimpleMode": {
+        "message": "This rule uses advanced regex and cannot be edited in simple mode",
+        "description": "Message when advanced rule can't use simple mode"
+    },
+    "prioritySettings": {
+        "message": "Priority Settings",
+        "description": "Priority settings heading"
+    },
+    "important": {
+        "message": "Important",
+        "description": "Important label"
+    },
+    "priorityDescription": {
+        "message": "Priority determines the order of rule matching. When multiple rules match the same URL, the rule with higher priority will be used.",
+        "description": "Description of priority functionality"
+    },
+    "priority": {
+        "message": "Priority",
+        "description": "Priority label"
+    },
+    "priorityHint": {
+        "message": "Lower number means higher priority",
+        "description": "Hint about priority values"
+    },
+    "createReverseRule": {
+        "message": "Also create reverse rule",
+        "description": "Create reverse rule checkbox label"
+    },
+    "cancel": {
+        "message": "Cancel",
+        "description": "Cancel button text"
+    },
+    "updateRule": {
+        "message": "Update Rule",
+        "description": "Update rule button text"
+    },
+    "addRule": {
+        "message": "Add Rule",
+        "description": "Add rule button text"
+    },
+    "fromDomain": {
+        "message": "From Domain",
+        "description": "From domain label in simple rule form"
+    },
+    "toDomain": {
+        "message": "To Domain",
+        "description": "To domain label in simple rule form"
+    },
+    "ruleName": {
+        "message": "Rule Name",
+        "description": "Rule name label"
+    },
+    "autoGenerate": {
+        "message": "Auto-generate",
+        "description": "Auto-generate checkbox label"
+    },
+    "domainPlaceholderFrom": {
+        "message": "e.g., github.com",
+        "description": "Placeholder for from domain input"
+    },
+    "domainPlaceholderTo": {
+        "message": "e.g., github.dev",
+        "description": "Placeholder for to domain input"
+    },
+    "ruleNamePlaceholder": {
+        "message": "e.g., GitHub to GitHub Dev",
+        "description": "Placeholder for rule name input"
+    },
+    "ruleNamePlaceholderAdvanced": {
+        "message": "e.g., GitHub to GitHub Dev",
+        "description": "Placeholder for rule name input in advanced mode"
+    },
+    "regexLabel": {
+        "message": "RegEx",
+        "description": "RegEx label"
+    },
+    "usedForMatching": {
+        "message": "used for matching URLs",
+        "description": "Description for source pattern"
+    },
+    "usedForRedirect": {
+        "message": "used for building redirect URL",
+        "description": "Description for target pattern"
+    },
+    "sourcePatternPlaceholder": {
+        "message": "e.g., ^https?://github\\.com/([^/]+/[^/]+)(?:/.*)?$",
+        "description": "Placeholder for source pattern input"
+    },
+    "targetPatternPlaceholder": {
+        "message": "e.g., https://github.dev/$1",
+        "description": "Placeholder for target pattern input"
+    },
+    "regexCaptureGroupHint": {
+        "message": "Use regular expression capture groups () to capture parts of the URL for use in the target URL",
+        "description": "Hint about regex capture groups"
+    },
+    "regexExample": {
+        "message": "Example",
+        "description": "Example label"
+    },
+    "regexExampleExplanation": {
+        "message": "can capture domain and path",
+        "description": "Explanation for regex example"
+    },
+    "regexReferenceHint": {
+        "message": "Use $1, $2, etc. to reference capture groups from the source pattern",
+        "description": "Hint about regex references"
+    },
+    "regexReferenceExampleExplanation": {
+        "message": "will use the path from the source URL",
+        "description": "Explanation for regex reference example"
     }
 }
