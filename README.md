@@ -30,10 +30,11 @@ A powerful browser extension for bidirectional URL switching and redirection bet
 ### From GitHub Releases
 
 1. Go to the [Releases](https://github.com/pyth0nb3st/URLSwitch/releases) page
-2. Download the latest `.crx` file
-3. Open Chrome and navigate to `chrome://extensions`
-4. Enable "Developer mode" in the top-right corner
-5. Drag and drop the downloaded `.crx` file into the Chrome window
+2. Download the latest `.zip` file
+3. Unzip the file to a local folder
+4. Open Chrome and navigate to `chrome://extensions`
+5. Enable "Developer mode" in the top-right corner
+6. Click "Load unpacked" and select the unzipped folder
 
 ### From Chrome Web Store (Coming Soon)
 
@@ -131,7 +132,7 @@ Build the extension:
 npm run build
 ```
 
-Package the extension as a zip and crx file:
+Package the extension as a zip file:
 ```bash
 npm run package
 ```
@@ -163,7 +164,7 @@ These commands will:
 This project uses GitHub Actions for continuous integration and delivery:
 
 - Automatically builds the extension on pushes to main branch
-- Creates releases with packaged .crx and .zip files when a new tag is pushed
+- Creates releases with packaged .zip files when a new tag is pushed
 - Generates release notes automatically
 
 ## 👥 Contributing
