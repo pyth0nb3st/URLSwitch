@@ -118,7 +118,7 @@ This converts `https://github.com/username/repo` to `https://github.dev/username
 
 ### Prerequisites
 
-- Node.js 16+ and npm
+- Node.js 18+ and npm
 
 ### Development Mode
 
