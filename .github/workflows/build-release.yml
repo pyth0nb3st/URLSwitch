@@ -57,6 +57,13 @@ jobs:
           files: |
             url-switch.zip
             url-switch.crx
+          body: |
+            ## Download Links
+            
+            - [Download ZIP File](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/url-switch.zip)
+            - [Download CRX File](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/url-switch.crx)
+            
+            ## Release Notes
           draft: false
           prerelease: false
           generate_release_notes: true
