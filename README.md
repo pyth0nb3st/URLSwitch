@@ -25,6 +25,8 @@ A powerful browser extension for bidirectional URL switching and redirection bet
 - **Import/Export**: Easily backup and share your rule configurations
 - **Multilingual Support**: Full interface available in English and Chinese (中文)
 
+![demo](./web/urlswitch.gif)
+
 ## 📥 Installation
 
 ### From GitHub Releases
