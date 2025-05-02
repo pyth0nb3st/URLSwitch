@@ -36,19 +36,6 @@ jobs:
           zip -r ../url-switch.zip .
           cd ..
           
-      - name: Install crx packaging tool
-        run: npm install -g crx
-          
-      - name: Generate CRX file
-        run: |
-          # Generate private key if it doesn't exist (first run only)
-          if [ ! -f key.pem ]; then
-            openssl genrsa -out key.pem 2048
-          fi
-          
-          # Build CRX using the private key
-          crx pack dist -o url-switch.crx -p key.pem
-        
       - name: Create GitHub Release
         id: create_release
         if: startsWith(github.ref, 'refs/tags/')
@@ -56,12 +43,18 @@ jobs:
         with:
           files: |
             url-switch.zip
-            url-switch.crx
           body: |
             ## Download Links
             
             - [Download ZIP File](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/url-switch.zip)
-            - [Download CRX File](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/url-switch.crx)
+            
+            ## Installation Instructions
+            
+            1. Download the ZIP file
+            2. Unzip the file to a local folder
+            3. In Chrome, go to `chrome://extensions/`
+            4. Enable "Developer mode" in the top-right
+            5. Click "Load unpacked" and select the unzipped folder
             
             ## Release Notes
           draft: false
@@ -73,5 +66,4 @@ jobs:
         with:
           name: extension-files
           path: |
-            url-switch.zip
-            url-switch.crx 
+            url-switch.zip 
